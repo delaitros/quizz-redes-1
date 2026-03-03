@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POST DIAGNÓSTICO - Nivel 2</title>
+    <title>Parte 3: Infraestructura y Protocolos</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
@@ -102,12 +102,12 @@
 
 <div id="game-container">
     <div id="login">
-        <div class="emoji-box">🖧</div>
+        <div class="emoji-box">🗄️</div>
         <h1 style="color: var(--hacker-green); margin: 0; text-shadow: 0 0 10px rgba(0,255,65,0.5);">SYSTEM_LOGIN</h1>
-        <p style="color: var(--hacker-green); opacity: 0.8; margin-bottom: 25px;">[ 🌐 Network Administration 2.0 ]</p>
+        <p style="color: var(--hacker-green); opacity: 0.8; margin-bottom: 25px;">[ 🌐 Evaluación de nivelación 3.0  - Protocolos]</p>
         <input type="text" id="nombre" placeholder="🆔 USER_FIRST_NAME">
         <input type="text" id="apellido" placeholder="🆔 USER_LAST_NAME">
-        <button class="btn" onclick="startQuiz()">▶️ INITIALIZE_PHASE_2</button>
+        <button class="btn" onclick="startQuiz()">▶️ INITIALIZE_EXAM</button>
     </div>
 
     <div id="quiz" class="hidden">
@@ -146,47 +146,46 @@
     }
     setInterval(drawMatrix, 35);
 
-    // --- LÓGICA DEL JUEGO ---
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzImjlTsteO1Rlqle2JkgAJBvetUzhrTAwZ1nXKVMJyJM9MPwNDo20d19523_FT5cFcXg/exec'; // <--- PEGA TU NUEVA URL AQUÍ
+    // --- LÓGICA DEL JUEGO CON TU URL ---
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzImjlTsteO1Rlqle2JkgAJBvetUzhrTAwZ1nXKVMJyJM9MPwNDo20d19523_FT5cFcXg/exec'; 
     let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
 
-    // 30 PREGUNTAS NUEVAS
     const questions = [
-        // FÁCIL
-        { q: "📶 [Q-01] ¿Cuáles son las dos bandas de frecuencia más comunes en redes Wi-Fi?", a: ["1.2 GHz y 3.5 GHz", "2.4 GHz y 5 GHz", "900 MHz y 2.4 GHz"], c: 1, exp: "Las redes Wi-Fi modernas operan principalmente en las bandas de 2.4 GHz (mayor alcance, menor velocidad) y 5 GHz (menor alcance, mayor velocidad y menos interferencias)." },
-        { q: "🧵 [Q-02] ¿Cuántos hilos de cobre tiene en su interior un cable UTP estándar?", a: ["4 hilos", "6 hilos", "8 hilos"], c: 2, exp: "Un cable UTP consta de 8 hilos de cobre aislados, agrupados en 4 pares trenzados para reducir la diafonía y la interferencia externa." },
-        { q: "🖧 [Q-03] ¿Qué dispositivo se utiliza principalmente para dar cobertura inalámbrica a una red cableada?", a: ["Access Point (AP)", "Switch gestionable", "Módem ADSL"], c: 0, exp: "El Access Point (Punto de Acceso) actúa como un puente que conecta dispositivos inalámbricos a una red cableada." },
-        { q: "🔒 [Q-04] ¿Cuál de los siguientes es el protocolo de seguridad más recomendado para una red Wi-Fi actual?", a: ["WEP", "WPA3", "Filtrado MAC"], c: 1, exp: "WPA3 es el estándar de seguridad inalámbrica más robusto en la actualidad. WEP es obsoleto y fácil de vulnerar." },
-        { q: "🖥️ [Q-05] ¿Qué componente de hardware permite a una PC conectarse físicamente a la red?", a: ["CPU", "Tarjeta de Red (NIC)", "Memoria RAM"], c: 1, exp: "La NIC (Network Interface Card) o Tarjeta de Interfaz de Red proporciona la conexión de hardware física entre la computadora y el medio de red." },
-        { q: "⚡ [Q-06] ¿Qué significa que un cable sea 'Directo' (Straight-through)?", a: ["Cruza los hilos de envío y recepción", "Usa la misma norma en ambos extremos", "Solo funciona con fibra óptica"], c: 1, exp: "Un cable directo utiliza la misma configuración de pines en ambos extremos (ej. T568B a T568B) y se usa para conectar equipos distintos, como una PC a un Switch." },
-        { q: "🔌 [Q-07] ¿Qué significan las siglas RJ en RJ-45?", a: ["Registered Jack", "Routing Jumper", "Radio Junction"], c: 0, exp: "Registered Jack (Conector Registrado). Es un estándar internacional para interfaces de red física." },
-        { q: "📏 [Q-08] ¿Qué herramienta es fundamental para verificar si un cable UTP recién armado funciona correctamente?", a: ["Pelacables", "Generador de tonos", "Tester o probador de red"], c: 2, exp: "El probador de red o Tester verifica la continuidad, los cortocircuitos y que el mapa de pines sea el correcto en ambos extremos." },
-        { q: "🌐 [Q-09] En términos simples, ¿qué es una dirección IP?", a: ["La marca de la tarjeta de red", "Una dirección lógica para ubicar un equipo", "La velocidad máxima de la conexión"], c: 1, exp: "Es un identificador lógico y numérico asignado a cada dispositivo conectado a una red que utiliza el Protocolo de Internet para la comunicación." },
-        { q: "🛡️ [Q-10] ¿Qué es el 'Blindaje' en un cable de red (como en el STP)?", a: ["Un software antivirus", "Una malla metálica que envuelve los cables", "Un conector de oro puro"], c: 1, exp: "El STP (Shielded Twisted Pair) incluye una malla o lámina de aluminio para proteger los datos de interferencias electromagnéticas (EMI)." },
-        
-        // MEDIO
-        { q: "🔋 [Q-11] ¿Qué tecnología permite enviar datos y energía eléctrica por el mismo cable de red?", a: ["PoE (Power over Ethernet)", "VLAN", "QoS"], c: 0, exp: "PoE permite que los cables Ethernet suministren energía a dispositivos como cámaras IP o Access Points, eliminando la necesidad de enchufes cercanos." },
-        { q: "🚪 [Q-12] ¿Cómo se le llama a la IP del router que permite a los equipos de una LAN salir a Internet?", a: ["Máscara de subred", "Servidor DNS", "Puerta de enlace (Default Gateway)"], c: 2, exp: "La Puerta de Enlace Predeterminada es el nodo (router) que sirve como punto de acceso a otra red externa, típicamente Internet." },
-        { q: "🧩 [Q-13] ¿Qué tecnología permite dividir un Switch físico en múltiples redes lógicas independientes?", a: ["NAT", "VLAN (Virtual LAN)", "DHCP"], c: 1, exp: "Las VLANs permiten segmentar una red local a nivel de Capa 2, mejorando la seguridad y reduciendo el dominio de difusión (broadcast)." },
-        { q: "🚪 [Q-14] ¿Qué puerto TCP se utiliza por defecto para conexiones seguras mediante SSH?", a: ["Puerto 21", "Puerto 22", "Puerto 23"], c: 1, exp: "El puerto 22 se asigna a SSH (Secure Shell), que permite el acceso remoto seguro a otros dispositivos. El 21 es FTP y el 23 Telnet." },
-        { q: "🔄 [Q-15] ¿Para qué sirve la dirección IP de loopback (127.0.0.1)?", a: ["Para salir a Internet", "Para probar la propia tarjeta de red local", "Para configurar el router"], c: 1, exp: "Hacer ping a la dirección de bucle local (127.0.0.1) verifica que el stack TCP/IP y la tarjeta de red están funcionando correctamente en el propio equipo." },
-        { q: "🔠 [Q-16] ¿En qué formato numérico se representan las direcciones IPv6?", a: ["Decimal", "Binario exclusivamente", "Hexadecimal"], c: 2, exp: "Debido a su longitud de 128 bits, IPv6 se representa en grupos de números y letras hexadecimales para acortar su escritura." },
-        { q: "🔌 [Q-17] Menciona dos tipos de conectores muy comunes en Fibra Óptica:", a: ["RJ-11 y BNC", "LC y SC", "USB y DB-9"], c: 1, exp: "LC (Lucent Connector) y SC (Standard Connector) son estándares de terminación física muy utilizados en enlaces de fibra óptica." },
-        { q: "⚡ [Q-18] ¿Cuál es la velocidad máxima teórica del cable UTP Categoría 5e a 100 metros?", a: ["100 Mbps", "1 Gbps (Gigabit)", "10 Gbps"], c: 1, exp: "La Categoría 5e (enhanced) fue diseñada para soportar velocidades de hasta 1 Gigabit por segundo (1000 Mbps) a una distancia de 100 metros." },
-        { q: "📻 [Q-19] En la banda Wi-Fi de 2.4 GHz, ¿cuáles son los 3 canales que NO se superponen?", a: ["1, 6 y 11", "2, 4 y 8", "1, 2 y 3"], c: 0, exp: "Para evitar interferencias (Co-Channel Interference), se recomienda configurar los APs en los canales 1, 6 u 11, ya que su rango de frecuencia no se solapa." },
-        { q: "🛡️ [Q-20] ¿Qué servicio de red traduce las direcciones IP privadas a una única IP pública para navegar?", a: ["ARP", "NAT (Network Address Translation)", "DNS"], c: 1, exp: "NAT permite que múltiples dispositivos de una red local (con IPs privadas) compartan una sola dirección IP pública para acceder a Internet." },
-        
-        // DIFÍCIL
-        { q: "📖 [Q-21] ¿Cuál es la función del protocolo ARP?", a: ["Traducir IPs públicas", "Enlazar una dirección IP con una dirección MAC", "Asignar IPs automáticamente"], c: 1, exp: "El Protocolo de Resolución de Direcciones (ARP) descubre y vincula la dirección física (MAC) asociada a una dirección IP conocida en una red local." },
-        { q: "🚀 [Q-22] A diferencia de TCP, ¿cuál es la característica principal del protocolo UDP?", a: ["Es orientado a conexión", "No garantiza la entrega ni el orden de los datos", "Cifra los paquetes"], c: 1, exp: "UDP es rápido pero 'best-effort'; no establece sesión previa ni retransmite paquetes perdidos, ideal para streaming de video o juegos en tiempo real." },
-        { q: "📚 [Q-23] ¿Cuál es la Capa 7 del modelo OSI?", a: ["Capa de Red", "Capa de Presentación", "Capa de Aplicación"], c: 2, exp: "La Capa de Aplicación proporciona interfaces de red a las aplicaciones del usuario final, como navegadores web o clientes de correo electrónico." },
-        { q: "🔢 [Q-24] Si una IP tiene el sufijo de subred /24 (Notación CIDR), ¿a qué máscara equivale?", a: ["255.0.0.0", "255.255.255.0", "255.255.0.0"], c: 1, exp: "El /24 significa que los primeros 24 bits de la máscara son '1', lo que en decimal corresponde exactamente a 255.255.255.0." },
-        { q: "🕸️ [Q-25] En una topología de Malla (Mesh) completa, ¿cómo se conectan los nodos?", a: ["Todos conectados a un switch central", "Todos los nodos están conectados directamente entre sí", "Forman un círculo cerrado"], c: 1, exp: "En una malla completa, cada nodo tiene un enlace punto a punto con todos los demás, ofreciendo redundancia máxima ante caídas." },
-        { q: "📉 [Q-26] ¿Qué es la 'Atenuación' en medios de transmisión?", a: ["Aceleración de datos", "Pérdida progresiva de la potencia de la señal por la distancia", "Colisión de paquetes"], c: 1, exp: "A medida que una señal eléctrica o luminosa viaja por el cable, pierde energía o amplitud. Si la atenuación es mucha, los datos se corrompen." },
-        { q: "💥 [Q-27] ¿Qué método utilizaban las redes Ethernet antiguas (Hubs) para detectar y evitar colisiones?", a: ["CSMA/CD", "Token Ring", "OSPF"], c: 0, exp: "Carrier Sense Multiple Access with Collision Detection. Los equipos escuchaban el cable antes de transmitir y, si detectaban choque de datos, esperaban un tiempo aleatorio." },
-        { q: "🆔 [Q-28] En una dirección MAC, ¿qué representan los primeros 24 bits (o 3 bytes)?", a: ["El número de serie del equipo", "El OUI (Identificador del fabricante)", "La red a la que pertenece"], c: 1, exp: "El OUI (Organizationally Unique Identifier) es asignado por el IEEE e identifica de manera única a la empresa que fabricó la tarjeta de red (ej. Cisco, Intel)." },
-        { q: "🔬 [Q-29] En fibra óptica, ¿cuál es la principal diferencia entre Monomodo y Multimodo?", a: ["Monomodo usa cobre", "Monomodo permite que la luz viaje en un solo rayo directo (mayor distancia)", "Multimodo es para largas distancias oceánicas"], c: 1, exp: "La fibra monomodo (Single-mode) tiene un núcleo ínfimo que guía la luz láser en un solo camino recto, permitiendo transmisiones a muchísimos kilómetros sin pérdida." },
-        { q: "📦 [Q-30] ¿Qué comando se utiliza en Windows para ver la tabla ARP local del equipo?", a: ["ipconfig /all", "arp -a", "netstat -r"], c: 1, exp: "El comando 'arp -a' despliega la caché de resolución de direcciones del sistema, mostrando qué IPs locales están asociadas a qué direcciones MAC." }
+        // FÁCIL - Infraestructura Básica y Conceptos
+        { q: "🗄️ [Q-01] ¿Cuál es el ancho estándar de un Rack de comunicaciones?", a: ["15 pulgadas", "19 pulgadas", "24 pulgadas"], c: 1, exp: "El estándar internacional para el ancho de los equipos montables en racks de telecomunicaciones es de 19 pulgadas (aprox. 48 cm)." },
+        { q: "🔌 [Q-02] ¿Qué función cumple un 'Patch Panel' o panel de parcheo?", a: ["Dar energía a los switches", "Organizar y terminar el cableado horizontal", "Proteger contra picos de voltaje"], c: 1, exp: "El Patch Panel centraliza y organiza los cables rígidos que vienen de las oficinas, permitiendo conectarlos de forma flexible al Switch usando cables cortos (patch cords)." },
+        { q: "🌍 [Q-03] ¿Qué describen las siglas WAN?", a: ["Wide Area Network", "Wireless Access Node", "Web Assigned Network"], c: 0, exp: "Red de Área Amplia. Conecta múltiples LANs geográficamente dispersas, como la red de una empresa entre distintas ciudades, o la misma Internet." },
+        { q: "🔋 [Q-04] ¿Por qué es vital instalar una UPS en el rack de red?", a: ["Para enfriar los equipos", "Para proveer energía de respaldo ante cortes", "Para acelerar la conexión a Internet"], c: 1, exp: "La UPS (Uninterruptible Power Supply) mantiene los equipos de red encendidos durante apagones cortos y los protege de variaciones de voltaje." },
+        { q: "🏷️ [Q-05] En redes Wi-Fi, ¿qué es el SSID?", a: ["El nombre público de la red inalámbrica", "La contraseña del router", "El protocolo de cifrado"], c: 0, exp: "Service Set Identifier. Es el nombre técnico que se le da a la red Wi-Fi para que los usuarios puedan identificarla y conectarse a ella." },
+        { q: "🧱 [Q-06] ¿Cómo se le llama comúnmente al conector RJ-45 hembra que va en la pared?", a: ["Plug", "Jack o Roseta", "Patch Cord"], c: 1, exp: "El Jack (o Keystone Jack) es el conector hembra fijo en las paredes o patch panels, mientras que el 'Plug' es el conector macho de los cables." },
+        { q: "📟 [Q-07] A diferencia de un Tester de red, ¿para qué usarías un Multímetro en redes?", a: ["Verificar el mapa de pines", "Medir voltaje en fuentes de poder o PoE", "Medir la velocidad de descarga"], c: 1, exp: "El multímetro mide magnitudes eléctricas (voltaje, resistencia, continuidad) y es útil para descartar fallas de energía física en los equipos." },
+        { q: "⚙️ [Q-08] ¿Cuál es la función principal de un Módem?", a: ["Modula y demodula la señal del proveedor (ISP)", "Reparte Wi-Fi a los celulares", "Filtra páginas web maliciosas"], c: 0, exp: "El módem traduce la señal analógica o de fibra del proveedor de Internet a una señal digital (Ethernet) que tu router o PC puede entender." },
+        { q: "🛤️ [Q-09] ¿Qué norma de la TIA/EIA regula los espacios y canalizaciones para telecomunicaciones?", a: ["TIA/EIA-568", "TIA/EIA-569", "TIA/EIA-606"], c: 1, exp: "La norma 569 estandariza cómo deben construirse las rutas (canaletas, ductos, bandejas) y los cuartos de telecomunicaciones en un edificio comercial." },
+        { q: "🧹 [Q-10] Al armar un cable UTP, ¿por qué NO se debe destrenzar demasiado el cable en el conector?", a: ["Porque no entra en el RJ-45", "Porque aumenta la interferencia y el ruido (Crosstalk)", "Porque el cable se corta"], c: 1, exp: "El trenzado anula las interferencias electromagnéticas. Si destrenzas más de 1.3 cm (media pulgada), la señal se degrada drásticamente en frecuencias altas." },
+
+        // MEDIO - Protocolos y Hardware Intermedio
+        { q: "🆘 [Q-11] Si tu PC obtiene la IP 169.254.x.x, ¿qué significa?", a: ["Es una IP pública de Internet", "Que hay un virus en la red", "APIPA: El servidor DHCP falló"], c: 2, exp: "APIPA (Automatic Private IP Addressing) es una IP que el sistema operativo se autoasigna cuando no puede encontrar un servidor DHCP en la red." },
+        { q: "📁 [Q-12] ¿Qué protocolo y puerto se utilizan para la transferencia clásica de archivos?", a: ["HTTP (Puerto 80)", "FTP (Puerto 21)", "SMTP (Puerto 25)"], c: 1, exp: "File Transfer Protocol (FTP) utiliza el puerto 21 para establecer la conexión y el control, y el 20 para la transferencia de datos." },
+        { q: "🧠 [Q-13] ¿Cómo sabe un Switch a qué puerto enviar los datos?", a: ["Lo envía a todos los puertos", "Consulta su tabla MAC (CAM Table)", "Usa las direcciones IP"], c: 1, exp: "El Switch aprende las direcciones físicas (MAC) de los equipos conectados y crea una tabla para enviar los tramas únicamente al puerto correcto." },
+        { q: "🏠 [Q-14] ¿Cuál de las siguientes es una dirección IP Privada típica de Clase C?", a: ["8.8.8.8", "192.168.1.50", "172.16.0.10"], c: 1, exp: "El rango 192.168.0.0 a 192.168.255.255 está reservado para redes privadas locales (LAN) y no es enrutable en Internet." },
+        { q: "📡 [Q-15] ¿Qué protocolo de red utiliza el comando PING para funcionar?", a: ["TCP", "UDP", "ICMP"], c: 2, exp: "El Internet Control Message Protocol (ICMP) se usa para enviar mensajes de error e información operativa, como las solicitudes de 'Echo' del Ping." },
+        { q: "💡 [Q-16] ¿A qué estándar IEEE pertenece la tecnología PoE original (hasta 15.4W)?", a: ["802.1Q", "802.3af", "802.11ac"], c: 1, exp: "El estándar IEEE 802.3af define Power over Ethernet, permitiendo enviar corriente continua junto con los datos en cables UTP." },
+        { q: "💻 [Q-17] En Windows, ¿qué comando muestra la IP, máscara y puerta de enlace?", a: ["ifconfig", "ipconfig", "netstat"], c: 1, exp: "En sistemas Windows, 'ipconfig' muestra la configuración de red actual. En sistemas basados en Linux/Unix se suele utilizar 'ifconfig' o 'ip a'." },
+        { q: "🚇 [Q-18] ¿Qué tecnología crea un 'túnel cifrado' a través de una red pública como Internet?", a: ["VLAN", "VPN (Virtual Private Network)", "NAT"], c: 1, exp: "Una VPN extiende una red privada a través de una red pública, permitiendo a los usuarios enviar y recibir datos de forma segura como si estuvieran conectados directamente a la red privada." },
+        { q: "🚦 [Q-19] Si conectas equipos con un HUB antiguo en lugar de un Switch, ¿en qué modo operan?", a: ["Full-Duplex", "Half-Duplex", "Simplex"], c: 1, exp: "Los Hubs comparten el mismo dominio de colisión, obligando a los equipos a operar en Half-Duplex (solo pueden enviar o recibir, no ambos al mismo tiempo)." },
+        { q: "🚀 [Q-20] ¿Cuál es la principal mejora del cable Categoría 6a respecto al Categoría 6?", a: ["Soporta 10 Gbps a 100 metros completos", "Es más delgado y flexible", "Solo usa fibra de vidrio"], c: 0, exp: "Mientras que Cat 6 solo soporta 10 Gbps hasta 55 metros, Cat 6A (Augmented) reduce el Alien Crosstalk y mantiene los 10 Gbps en los 100 metros completos." },
+
+        // DIFÍCIL - Diagnóstico Avanzado y Routing
+        { q: "🔊 [Q-21] Al certificar un cableado, ¿qué mide el parámetro NEXT?", a: ["Velocidad de descarga", "Diafonía o ruido en el extremo cercano del cable", "La longitud total del cable"], c: 1, exp: "Near-End Crosstalk (NEXT) mide la interferencia de señal de un par de hilos hacia otro par adyacente en el mismo extremo donde se originó la señal." },
+        { q: "📦 [Q-22] En redes Ethernet, ¿cuál es el tamaño estándar de la MTU?", a: ["1500 bytes", "9000 bytes", "128 bytes"], c: 0, exp: "Maximum Transmission Unit. Es el tamaño máximo del paquete de datos que puede transmitirse en una trama de red sin ser fragmentado (1500 bytes por defecto en Ethernet)." },
+        { q: "🏷️ [Q-23] ¿Qué estándar IEEE se encarga del 'Tagging' o etiquetado de VLANs (Trunking)?", a: ["802.1X", "802.1Q", "802.3ad"], c: 1, exp: "El protocolo 802.1Q inserta una etiqueta (tag) en las tramas Ethernet para identificar a qué VLAN pertenece la información cuando viaja entre switches." },
+        { q: "🔁 [Q-24] En el protocolo IPv6, ¿cómo se representa la dirección de Loopback (localhost)?", a: ["127.0.0.1", "::1", "FE80::"], c: 1, exp: "En IPv6, ::1 equivale funcionalmente a la dirección IPv4 127.0.0.1. Se utiliza para que un nodo se envíe paquetes a sí mismo para pruebas." },
+        { q: "🗺️ [Q-25] Protocolos como OSPF o RIP son ejemplos de:", a: ["Protocolos de Enrutamiento Dinámico", "Protocolos de Capa Física", "Sistemas de Firewall"], c: 0, exp: "Permiten a los routers intercambiar información entre sí para aprender automáticamente las mejores rutas hacia otras redes, en lugar de configurarlas manualmente." },
+        { q: "📉 [Q-26] Al medir la atenuación de una señal en cables o fibra, ¿qué unidad de medida se usa?", a: ["Voltios (V)", "Decibelios (dB)", "Ohmios (Ω)"], c: 1, exp: "La atenuación (pérdida de potencia de la señal) se mide en Decibelios. Un cable más largo o de mala calidad presentará mayor pérdida en dB." },
+        { q: "⏱️ [Q-27] En redes (especialmente VoIP o Video), ¿qué es el 'Jitter'?", a: ["El ancho de banda máximo", "La variación o fluctuación en el tiempo de llegada de los paquetes", "La pérdida de paquetes descartados"], c: 1, exp: "El Jitter mide la irregularidad en la latencia. Si los paquetes de voz llegan con retrasos variables, la llamada se escuchará entrecortada o robótica." },
+        { q: "🧱 [Q-28] ¿Cuál es la diferencia de un Firewall 'Stateful' respecto a uno 'Stateless'?", a: ["Es más económico", "Recuerda el estado de las conexiones activas", "No necesita dirección IP"], c: 1, exp: "Un firewall de inspección de estado (Stateful) rastrea y recuerda las sesiones de red activas, permitiendo el tráfico de retorno automáticamente si tú iniciaste la conexión." },
+        { q: "🔬 [Q-29] ¿Qué equipo especializado se usa para buscar cortes exactos en un enlace de Fibra Óptica?", a: ["OTDR", "Fluke MicroScanner", "Generador de tonos"], c: 0, exp: "El OTDR (Reflectómetro Óptico en el Dominio de Tiempo) envía pulsos de luz y mide su reflejo para detectar con precisión a cuántos metros está la falla o el empalme." },
+        { q: "🤝 [Q-30] El proceso TCP 'Three-Way Handshake' para establecer conexión consta de 3 pasos:", a: ["PING, PONG, ECHO", "SYN, SYN-ACK, ACK", "REQ, RES, DONE"], c: 1, exp: "Sincronización (SYN), Sincronización-Acuse (SYN-ACK) y Acuse de recibo (ACK). Así garantiza TCP que ambos equipos están listos para hablar antes de enviar datos." }
     ];
 
     function startQuiz() {
@@ -205,12 +204,12 @@
             clearInterval(timer);
             document.getElementById('level-indicator').innerText = "🛡️ ACCESS_LEVEL: MEDIO";
             document.getElementById('level-indicator').style.background = "var(--warning-orange)";
-            await Swal.fire({ title: '📈 LEVEL_UP', text: 'Entrando a configuraciones avanzadas y WiFi.', icon: 'info', confirmButtonText: 'PROCEED', customClass: { popup: 'swal-hacker' } });
+            await Swal.fire({ title: '📈 LEVEL_UP', text: 'Entrando a protocolos y hardware intermedio.', icon: 'info', confirmButtonText: 'PROCEED', customClass: { popup: 'swal-hacker' } });
         } else if (currentQ === 20) {
             clearInterval(timer);
             document.getElementById('level-indicator').innerText = "⚠️ ACCESS_LEVEL: CRÍTICO";
             document.getElementById('level-indicator').style.background = "var(--alert-red)";
-            await Swal.fire({ title: '⚠️ CRITICAL_PHASE', text: 'Fase de enrutamiento y fibra óptica.', icon: 'warning', confirmButtonText: 'ACKNOWLEDGE', customClass: { popup: 'swal-hacker' } });
+            await Swal.fire({ title: '⚠️ CRITICAL_PHASE', text: 'Fase de diagnóstico avanzado y routing.', icon: 'warning', confirmButtonText: 'ACKNOWLEDGE', customClass: { popup: 'swal-hacker' } });
         }
         
         document.getElementById('game-emoji').innerText = "📡";
@@ -267,6 +266,7 @@
         const container = document.getElementById('quiz');
         container.innerHTML = "<h2 style='color:var(--hacker-green)'>⚙️ UPLOADING_RESULTS...</h2>";
         
+        // ENVÍO SEGURO DE DATOS COMO FORMULARIO A TU URL
         let formData = new FormData();
         formData.append('nombre', nombre);
         formData.append('apellido', apellido);
@@ -280,15 +280,14 @@
                 <p style="color:var(--hacker-green); font-size: 1.2rem; font-weight: bold;">📈 Final_Score: ${score}</p>
                 <button class="btn" onclick="location.reload()">🔄 RE-INITIALIZE_SYSTEM</button>
             `;
-            Swal.fire({ title: '✅ OPERATION_COMPLETE', text: 'Resultados enviados exitosamente a la central.', icon: 'success', customClass: { popup: 'swal-hacker' } });
+            Swal.fire({ title: '✅ OPERATION_COMPLETE', text: 'Resultados enviados exitosamente a tu Google Sheets.', icon: 'success', customClass: { popup: 'swal-hacker' } });
         })
         .catch(error => {
             console.error('Error!', error.message);
-            Swal.fire({ title: '❌ SYSTEM_FAULT', text: 'Error de conexión. Contactar administrador.', icon: 'error', customClass: { popup: 'swal-hacker' } });
+            Swal.fire({ title: '❌ SYSTEM_FAULT', text: 'Error de conexión. Verifica la configuración de Google Apps Script.', icon: 'error', customClass: { popup: 'swal-hacker' } });
         });
     }
 </script>
 </body>
 </html>
-
 
