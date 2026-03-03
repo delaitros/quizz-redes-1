@@ -3,159 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizz Redes by Tomas Enriquez</title>
+    <title>Redes Master: Hacker Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --ios-blue: #007AFF;
-            --glass: rgba(255, 255, 255, 0.35);
-            --border-glass: rgba(255, 255, 255, 0.5);
+            --hacker-green: #00FF41;
+            --hacker-dark: #0D0208;
+            --glass-hacker: rgba(0, 20, 0, 0.85);
+            --border-hacker: rgba(0, 255, 65, 0.3);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center;
+            margin: 0; padding: 20px;
+            background-color: var(--hacker-dark);
+            color: var(--hacker-green);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh; overflow: hidden;
-            background: linear-gradient(135deg, #001f3f 0%, #007AFF 50%, #5856D6 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
         }
 
-        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
-
-        /* Fondo de logos WiFi */
-        .wifi-pattern {
+        /* Canvas para el efecto Matrix */
+        #matrix-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="white" opacity="0.06"><path d="M12 21l-12-18h24z"/></svg>');
-            transform: rotate(-15deg) scale(1.8); pointer-events: none; z-index: -1;
+            z-index: -1;
         }
 
         #game-container {
-            background: var(--glass);
-            backdrop-filter: blur(35px) saturate(180%);
-            -webkit-backdrop-filter: blur(35px) saturate(180%);
-            padding: 35px; border-radius: 40px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.4), inset 0 0 0 1px var(--border-glass);
-            width: 100%; max-width: 460px; text-align: center;
-            position: relative; cursor: grab;
+            background: var(--glass-hacker);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 35px; border-radius: 25px;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+            width: 100%; max-width: 480px; text-align: center;
+            border: 1px solid var(--border-hacker);
+            position: relative;
         }
-
-        #game-container:active { cursor: grabbing; }
 
         .hidden { display: none; }
 
         input {
-            padding: 18px; margin: 10px 0; border-radius: 20px; border: none;
-            width: 85%; font-size: 1.1rem; background: rgba(255, 255, 255, 0.7);
-            text-align: center; outline: none;
+            padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--hacker-green);
+            width: 85%; font-size: 1.1rem; background: rgba(0,0,0,0.7);
+            color: var(--hacker-green); text-align: center; outline: none;
         }
 
         .btn {
-            background: var(--ios-blue); color: white; border: none; padding: 18px;
-            border-radius: 20px; cursor: pointer; width: 100%; margin-top: 15px;
+            background: transparent; color: var(--hacker-green); border: 1px solid var(--hacker-green);
+            padding: 18px; border-radius: 15px; cursor: pointer; width: 100%; margin-top: 15px;
             font-weight: 600; font-size: 1.1rem; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            background: var(--hacker-green); color: var(--hacker-dark);
+            box-shadow: 0 0 20px var(--hacker-green);
         }
 
         .level-tag {
-            display: inline-block; padding: 6px 18px; border-radius: 50px;
-            background: white; color: #1C1C1E; font-size: 0.8rem; font-weight: 800; margin-bottom: 10px;
+            display: inline-block; padding: 6px 18px; border-radius: 5px;
+            background: var(--hacker-green); color: var(--hacker-dark);
+            font-size: 0.8rem; font-weight: 900; margin-bottom: 10px;
         }
 
-        #timer { font-size: 3.5rem; font-weight: 800; color: white; margin: 10px 0; }
+        #timer { font-size: 3.5rem; font-weight: 800; color: #FF3B30; margin: 10px 0; text-shadow: 0 0 10px #FF3B30; }
 
-        .emoji-box { font-size: 4.5rem; margin: 10px 0; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .emoji-box { font-size: 4.5rem; margin: 10px 0; }
 
         .opt-btn { 
-            background: rgba(255,255,255,0.9); color: #1C1C1E; border: none; 
+            background: rgba(0, 40, 0, 0.6); color: var(--hacker-green); border: 1px solid var(--border-hacker); 
             margin-bottom: 12px; text-align: left; padding: 18px; font-weight: 500;
         }
         
-        .opt-btn:hover { background: white; transform: scale(1.02); }
+        .opt-btn:hover { border-color: var(--hacker-green); }
+
+        /* Estilo para los carteles explicativos */
+        .swal-hacker {
+            background: var(--hacker-dark) !important;
+            color: var(--hacker-green) !important;
+            border: 1px solid var(--hacker-green) !important;
+            border-radius: 0 !important;
+        }
+        .swal-text-left { text-align: left !important; font-size: 1rem !important; font-family: 'Courier New', Courier, monospace; }
     </style>
 </head>
 <body>
 
-<div class="wifi-pattern"></div>
+<canvas id="matrix-canvas"></canvas>
 
 <div id="game-container">
     <div id="login">
-        <div class="emoji-box">📶</div>
-        <h1 style="color: white; margin: 0; letter-spacing: -1px;">Redes Master</h1>
-        <p style="color: rgba(255,255,255,0.9); margin-bottom: 30px;">Instalación y Mantenimiento 1</p>
-        <input type="text" id="nombre" placeholder="Nombre">
-        <input type="text" id="apellido" placeholder="Apellido">
-        <button class="btn" onclick="startQuiz()">Comenzar Reto</button>
+        <div class="emoji-box">👤</div>
+        <h1 style="color: var(--hacker-green); margin: 0; text-shadow: 0 0 10px var(--hacker-green);">SYSTEM LOGIN</h1>
+        <p style="color: var(--hacker-green); opacity: 0.7; margin-bottom: 30px;">[ Network Intrusions 1.0 ]</p>
+        <input type="text" id="nombre" placeholder="Nombre_Usuario">
+        <input type="text" id="apellido" placeholder="Apellido_Usuario">
+        <button class="btn" onclick="startQuiz()">Initialize_Challenge</button>
     </div>
 
     <div id="quiz" class="hidden">
-        <div id="level-indicator" class="level-tag">NIVEL: FÁCIL</div>
-        <div class="emoji-box" id="game-emoji">🤔</div>
+        <div id="level-indicator" class="level-tag">ACCESS: FÁCIL</div>
+        <div class="emoji-box" id="game-emoji">🕵️‍♂️</div>
         <div id="timer">180</div>
-        <h2 id="question-text" style="color: white; font-size: 1.4rem; margin-bottom: 25px;"></h2>
+        <h2 id="question-text" style="color: var(--hacker-green); font-size: 1.2rem; margin-bottom: 25px;"></h2>
         <div id="options"></div>
     </div>
 </div>
 
 <script>
+    // --- EFECTO MATRIX ---
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00FF41";
+        ctx.font = fontSize + "px arial";
+        for (let i = 0; i < drops.length; i++) {
+            const text = characters.charAt(Math.floor(Math.random() * characters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 33);
+
+    // --- LÓGICA DEL JUEGO ---
     const scriptURL = 'TU_URL_DE_GOOGLE_SCRIPT'; 
     let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
 
-    // Draggable Logic
-    const container = document.getElementById('game-container');
-    let isDragging = false; let offset = [0,0];
-    container.onmousedown = (e) => {
-        if(e.target.closest('button') || e.target.closest('input')) return;
-        isDragging = true;
-        offset = [container.offsetLeft - e.clientX, container.offsetTop - e.clientY];
-    };
-    document.onmousemove = (e) => {
-        if (!isDragging) return;
-        container.style.position = 'absolute';
-        container.style.left = (e.clientX + offset[0]) + 'px';
-        container.style.top = (e.clientY + offset[1]) + 'px';
-    };
-    document.onmouseup = () => isDragging = false;
-
     const questions = [
-        // FÁCIL
-        { q: "🔌 ¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Twisted Port", "Unitary Total Port"], c: 0 },
-        { q: "🔘 ¿Cuál es el conector estándar para cables de cobre?", a: ["RJ-11", "RJ-45", "BNC"], c: 1 },
-        { q: "✂️ ¿Qué herramienta se usa para fijar el conector?", a: ["Soldador", "Crimpadora", "Pinza universal"], c: 1 },
-        { q: "⭐ ¿Cuál es la topología con un nodo central?", a: ["Bus", "Anillo", "Estrella"], c: 2 },
-        { q: "🛡️ ¿Qué cable es inmune a interferencias?", a: ["UTP", "Fibra Óptica", "Coaxial"], c: 1 },
-        { q: "📟 ¿Qué dispositivo conecta equipos en una LAN?", a: ["Módem", "Switch", "Repetidor"], c: 1 },
-        { q: "🏠 ¿Qué significan las siglas LAN?", a: ["Local Area Network", "Long Access Node", "Logical Area Net"], c: 0 },
-        { q: "🎨 ¿Color inicial en la norma T568B?", a: ["Verde-Blanco", "Naranja-Blanco", "Azul"], c: 1 },
-        { q: "📡 ¿Para qué sirve el comando 'ping'?", a: ["Velocidad", "Conectividad", "Cerrar sesión"], c: 1 },
-        { q: "🏎️ ¿Qué unidad mide la velocidad de transmisión?", a: ["Hertz", "Bps (bits/seg)", "Watts"], c: 1 },
-        // MEDIO
-        { q: "📦 ¿En qué capa OSI trabaja el Switch?", a: ["Capa 1", "Capa 2", "Capa 3"], c: 1 },
-        { q: "🤖 ¿Protocolo que asigna IPs automáticamente?", a: ["DNS", "DHCP", "FTP"], c: 1 },
-        { q: "📶 ¿Qué estándar define el WiFi?", a: ["802.3", "802.11", "802.5"], c: 1 },
-        { q: "🔢 ¿Máscara por defecto Clase C?", a: ["255.0.0.0", "255.255.0.0", "255.255.255.0"], c: 2 },
-        { q: "🔗 ¿Cable para conectar 2 Switches (Legacy)?", a: ["Cruzado", "Directo", "USB"], c: 0 },
-        { q: "🌐 ¿Puerto estándar HTTP?", a: ["21", "80", "443"], c: 1 },
-        { q: "📍 ¿Función de Capa 3 OSI?", a: ["Física", "Enrutamiento", "Cifrado"], c: 1 },
-        { q: "📏 ¿Límite de distancia cable UTP?", a: ["50m", "100m", "500m"], c: 1 },
-        { q: "🆔 ¿Qué es una dirección MAC?", a: ["Lógica", "Física única", "Tipo de IP"], c: 1 },
-        { q: "⚡ ¿Categoría para 10 Gbps (55m)?", a: ["Cat 5", "Cat 5e", "Cat 6"], c: 2 },
-        // DIFÍCIL
-        { q: "🚛 ¿Protocolo de capa de Transporte?", a: ["IP", "TCP", "Ethernet"], c: 1 },
-        { q: "🗺️ ¿Función de 'Traceroute'?", a: ["Ruta de paquetes", "Caché", "Voltaje"], c: 0 },
-        { q: "🌈 ¿Pares que transmiten en 10/100?", a: ["Azul/Marrón", "Naranja/Verde", "Todos"], c: 1 },
-        { q: "🔊 ¿Qué es el 'Crosstalk'?", a: ["Velocidad", "Interferencia entre pares", "Falla"], c: 1 },
-        { q: "0️⃣1️⃣ ¿Bits de una dirección IPv4?", a: ["32", "64", "128"], c: 0 },
-        { q: "🚦 ¿Función principal del Router?", a: ["Conectar cables", "Interconectar redes", "Amplificar"], c: 1 },
-        { q: "📖 ¿Protocolo de resolución de nombres?", a: ["ARP", "DNS", "ICMP"], c: 1 },
-        { q: "🌀 ¿Efecto de torsión excesiva?", a: ["Nada", "Mejora", "Daño al cobre"], c: 2 },
-        { q: "🧱 ¿Dispositivo de Capa 1 OSI?", a: ["Hub", "Router", "Firewall"], c: 0 },
-        { q: "🔄 ¿Qué es Full-Duplex?", a: ["Solo envía", "Simultáneo", "Turnos"], c: 1 }
+        { q: "> ¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Twisted Port", "Unitary Total Port"], c: 0, exp: "UTP es 'Par Trenzado No Blindado'. Es el estándar para redes locales por su flexibilidad y bajo costo, aunque no tiene protección contra interferencias fuertes." },
+        { q: "> ¿Conector estándar para cobre?", a: ["RJ-11", "RJ-45", "BNC"], c: 1, exp: "El RJ-45 tiene 8 contactos y es el que usamos para redes Ethernet. El RJ-11 es solo para teléfonos." },
+        { q: "> ¿Herramienta para fijar el conector?", a: ["Soldador", "Crimpadora", "Pinza universal"], c: 1, exp: "La crimpadora presiona los contactos metálicos del conector sobre los hilos de cobre del cable para asegurar la conexión eléctrica." },
+        { q: "> ¿Topología con un nodo central?", a: ["Bus", "Anillo", "Estrella"], c: 2, exp: "En la Estrella, todos los cables van a un Switch central. Si un cable se rompe, solo falla esa PC, no toda la red." },
+        { q: "> ¿Cable inmune a interferencias?", a: ["UTP", "Fibra Óptica", "Coaxial"], c: 1, exp: "La Fibra Óptica transmite luz, no electricidad. Por eso, el ruido eléctrico de motores o cables de alta tensión no le afecta." },
+        { q: "> ¿Dispositivo que conecta equipos en LAN?", a: ["Módem", "Switch", "Repetidor"], c: 1, exp: "El Switch reparte los datos de forma inteligente: sabe exactamente a qué computadora enviar cada paquete de información." },
+        { q: "> ¿Qué significan las siglas LAN?", a: ["Local Area Network", "Long Access Node", "Logical Area Net"], c: 0, exp: "Es una Red de Área Local, limitada a un espacio físico pequeño como una oficina, una casa o tu escuela." },
+        { q: "> ¿Color inicial en la norma T568B?", a: ["Verde-Blanco", "Naranja-Blanco", "Azul"], c: 1, exp: "La norma B empieza con el par Naranja: Blanco-Naranja y luego Naranja sólido. Es la más común en redes." },
+        { q: "> ¿Para qué sirve el comando 'ping'?", a: ["Ver velocidad", "Probar conectividad", "Cerrar sesión"], c: 1, exp: "El PING envía un eco a otra IP para ver si responde. Si hay respuesta, hay conexión física y lógica." },
+        { q: "> ¿Unidad de velocidad de transmisión?", a: ["Hertz", "Bps (bits/seg)", "Watts"], c: 1, exp: "Se mide en bits por segundo. En tu clase solemos hablar de Mbps (Megabits) o Gbps (Gigabits)." },
+        { q: "> ¿En qué capa OSI trabaja el Switch?", a: ["Capa 1", "Capa 2", "Capa 3"], c: 1, exp: "Trabaja en la Capa 2 (Enlace de Datos) porque lee las direcciones MAC de las tarjetas de red." },
+        { q: "> ¿Protocolo de IPs automáticas?", a: ["DNS", "DHCP", "FTP"], c: 1, exp: "DHCP es el 'repartidor' de IPs. Gracias a él no tenemos que configurar cada PC a mano." },
+        { q: "> ¿Qué estándar define el WiFi?", a: ["802.3", "802.11", "802.5"], c: 1, exp: "IEEE 802.11 es el 'nombre real' del WiFi. El 802.3 es para el cable Ethernet." },
+        { q: "> ¿Máscara por defecto Clase C?", a: ["255.0.0.0", "255.255.0.0", "255.255.255.0"], c: 2, exp: "La clase C es para redes pequeñas. Permite tener hasta 254 computadoras conectadas." },
+        { q: "> ¿Cable para conectar 2 Switches?", a: ["Cruzado", "Directo", "USB"], c: 0, exp: "Para equipos iguales se usa cable Cruzado. Aunque hoy los switches modernos lo detectan y se adaptan solos (Auto-MDIX)." },
+        { q: "> ¿Puerto estándar HTTP?", a: ["21", "80", "443"], c: 1, exp: "El puerto 80 es la puerta de entrada para las páginas web comunes. El 443 es para las seguras (HTTPS)." },
+        { q: "> ¿Función de Capa 3 OSI?", a: ["Física", "Enrutamiento", "Cifrado"], c: 1, exp: "La Capa de Red se encarga de buscar el mejor camino para los datos usando las direcciones IP." },
+        { q: "> ¿Límite de distancia cable UTP?", a: ["50m", "100m", "500m"], c: 1, exp: "Pasados los 100 metros, la señal eléctrica se debilita tanto que los datos se pierden. Se necesita un repetidor o un switch." },
+        { q: "> ¿Qué es una dirección MAC?", a: ["Lógica", "Física única", "Tipo de IP"], c: 1, exp: "Es el documento de identidad de la placa de red. No hay dos iguales en el mundo y se graba en la fábrica." },
+        { q: "> ¿Categoría para 10 Gbps (55m)?", a: ["Cat 5", "Cat 5e", "Cat 6"], c: 2, exp: "La Categoría 6 tiene más torsión y mejores materiales, permitiendo velocidades de 10 Gigabits en distancias cortas." },
+        { q: "> ¿Protocolo de capa de Transporte?", a: ["IP", "TCP", "Ethernet"], c: 1, exp: "TCP es el protocolo que se asegura de que la información llegue sin errores. Si falta algo, lo pide de nuevo." },
+        { q: "> ¿Función de 'Traceroute'?", a: ["Ver la ruta", "Borrar caché", "Medir voltaje"], c: 0, exp: "Muestra por qué servidores y routers pasa tu conexión antes de llegar a su destino." },
+        { q: "> ¿Pares que transmiten en 10/100?", a: ["Azul/Marrón", "Naranja/Verde", "Todos"], c: 1, exp: "En redes de 100 Mbps solo se usan los pares naranja y verde. El azul y marrón quedan libres para PoE o telefonía." },
+        { q: "> ¿Qué es el 'Crosstalk'?", a: ["Velocidad", "Interferencia entre pares", "Falla"], c: 1, exp: "Es cuando la señal de un cable se 'cruza' con el de al lado por falta de aislamiento o mala torsión." },
+        { q: "> ¿Bits de dirección IPv4?", a: ["32", "64", "128"], c: 0, exp: "Se compone de 4 bloques de 8 bits cada uno (ej: 192.168.1.1), lo que da un total de 32 bits." },
+        { q: "> ¿Función principal del Router?", a: ["Cables", "Interconectar redes", "Amplificar"], c: 1, exp: "Su trabajo es unir redes distintas, por ejemplo, unir la red de tu laboratorio con la red de Internet." },
+        { q: "> ¿Protocolo de resolución de nombres?", a: ["ARP", "DNS", "ICMP"], c: 1, exp: "El DNS traduce nombres (google.com) a números IP. Es como la agenda de contactos de Internet." },
+        { q: "> ¿Efecto de torsión excesiva?", a: ["Nada", "Mejora", "Daño al cobre"], c: 2, exp: "Si estiras o doblas demasiado el cable, el cobre interno se daña y la red empieza a tener microcortes." },
+        { q: "> ¿Dispositivo Capa 1 OSI?", a: ["Hub", "Router", "Firewall"], c: 0, exp: "El Hub solo repite electricidad a todos los puertos sin pensar. Por eso es Capa 1 (Física)." },
+        { q: "> ¿Qué es Full-Duplex?", a: ["Solo envía", "Simultáneo", "Turnos"], c: 1, exp: "Significa que el equipo puede enviar y recibir datos al mismo tiempo sin colisiones." }
     ];
 
     function startQuiz() {
         nombre = document.getElementById('nombre').value.trim();
         apellido = document.getElementById('apellido').value.trim();
-        if(!nombre || !apellido) return Swal.fire('Faltan Datos', 'Pon tu nombre para el diploma', 'info');
+        if(!nombre || !apellido) return Swal.fire({ title: 'ACCESS DENIED', text: 'Nombre de usuario requerido', icon: 'error', customClass: { popup: 'swal-hacker' } });
         document.getElementById('login').classList.add('hidden');
         document.getElementById('quiz').classList.remove('hidden');
         showQuestion();
@@ -164,20 +185,19 @@
     async function showQuestion() {
         if(currentQ >= questions.length) return endQuiz();
         
-        // Niveles con Botón de Aceptar
         if (currentQ === 10) {
             clearInterval(timer);
-            document.getElementById('level-indicator').innerText = "NIVEL: MEDIO";
+            document.getElementById('level-indicator').innerText = "ACCESS: MEDIO";
             document.getElementById('level-indicator').style.background = "#FF9500";
-            await Swal.fire({ title: '📶 ¡Nivel Medio!', text: 'Dominaste lo básico. ¿Listo para más?', confirmButtonText: 'Aceptar' });
+            await Swal.fire({ title: 'LEVEL UP', text: 'Fase de protocolos desbloqueada.', icon: 'info', confirmButtonText: 'PROCEED', customClass: { popup: 'swal-hacker' } });
         } else if (currentQ === 20) {
             clearInterval(timer);
-            document.getElementById('level-indicator').innerText = "NIVEL: DIFÍCIL";
+            document.getElementById('level-indicator').innerText = "ACCESS: CRÍTICO";
             document.getElementById('level-indicator').style.background = "#FF3B30";
-            await Swal.fire({ title: '🔥 ¡Nivel Experto!', text: 'Solo para maestros de las redes.', confirmButtonText: '¡Doy el nivel!' });
+            await Swal.fire({ title: 'CRITICAL PHASE', text: 'Entrando a nivel de administración de sistemas.', icon: 'warning', confirmButtonText: 'I AM READY', customClass: { popup: 'swal-hacker' } });
         }
         
-        document.getElementById('game-emoji').innerText = "🤔";
+        document.getElementById('game-emoji').innerText = "🕵️‍♂️";
         timeLeft = 180;
         document.getElementById('timer').innerText = timeLeft;
         document.getElementById('question-text').innerText = questions[currentQ].q;
@@ -199,43 +219,49 @@
         }, 1000);
     }
 
-    function check(idx) {
+    async function check(idx) {
         clearInterval(timer);
-        const emoji = document.getElementById('game-emoji');
         const isCorrect = idx === questions[currentQ].c;
+        const emoji = document.getElementById('game-emoji');
         
         if(isCorrect) {
             score += (timeLeft * 2) + 100;
-            emoji.innerText = "😎";
+            emoji.innerText = "⚡";
         } else {
-            emoji.innerText = "😭";
+            emoji.innerText = "❌";
         }
 
-        setTimeout(() => {
-            currentQ++;
-            showQuestion();
-        }, 1300);
+        await Swal.fire({
+            title: isCorrect ? 'DATA_CRACKED' : 'SYSTEM_ERROR',
+            html: `<div class="swal-text-left"><b>TARGET_DATA:</b> ${questions[currentQ].a[questions[currentQ].c]}<br><br><b>ANALYSIS:</b><br>${questions[currentQ].exp}</div>`,
+            icon: isCorrect ? 'success' : 'error',
+            confirmButtonText: 'CONTINUE_SCAN',
+            confirmButtonColor: '#00FF41',
+            allowOutsideClick: false,
+            timer: 45000,
+            timerProgressBar: true,
+            customClass: { popup: 'swal-hacker' }
+        });
+
+        currentQ++;
+        showQuestion();
     }
 
     function endQuiz() {
         const container = document.getElementById('quiz');
-        container.innerHTML = "<h2 style='color:white'>Subiendo puntaje...</h2>";
+        container.innerHTML = "<h2 style='color:var(--hacker-green)'>UPLOADING_RESULTS...</h2>";
         
-        let feedback = score > 4500 ? "¡Eres una leyenda de IT! 🚀" : "Te recomiendo estudiar un poco más. 📚";
-
         fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({nombre, apellido, puntos: score}) })
         .then(() => {
             container.innerHTML = `
-                <h1 style="font-size: 4rem;">🏆</h1>
-                <h2 style="color:white">${nombre}, Puntaje: ${score}</h2>
-                <p style="color:white">${feedback}</p>
-                <button class="btn" onclick="location.reload()">Reiniciar</button>
+                <h1 style="font-size: 3rem; color:var(--hacker-green)">COMPLETED</h1>
+                <h2 style="color:var(--hacker-green)">Agent: ${nombre}</h2>
+                <p style="color:var(--hacker-green)">Final_Score: ${score}</p>
+                <button class="btn" onclick="location.reload()">RE-INITIALIZE</button>
             `;
-            Swal.fire('¡Felicidades!', feedback, score > 4500 ? 'success' : 'info');
+            Swal.fire({ title: 'OPERATION_COMPLETE', text: 'Resultados enviados al servidor central.', icon: 'success', customClass: { popup: 'swal-hacker' } });
         });
     }
 </script>
 </body>
 </html>
-
-
