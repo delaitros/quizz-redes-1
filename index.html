@@ -149,7 +149,7 @@
     setInterval(drawMatrix, 35);
 
     // --- LÓGICA DEL JUEGO ---
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbydxWKbTehUSDWoaLqgi0MuaMom7MrERLrwXLHqF3jSkMGUCQJClj5r0xJlAyMOv7DEoQ/exec'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw9okghfOpeISuxV6wFCwxubF60drymXU7l2gAjtF70ofPLgyaEA2GmRVNkAiezkLo8fA/exec'; 
     let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
 
     const questions = [
@@ -267,7 +267,13 @@
         const container = document.getElementById('quiz');
         container.innerHTML = "<h2 style='color:var(--hacker-green)'>⚙️ UPLOADING_RESULTS_TO_SERVER...</h2>";
         
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({nombre, apellido, puntos: score}) })
+        // Versión mejorada del Fetch para evitar bloqueos del navegador
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' }, // ¡Esta línea es la clave!
+            body: JSON.stringify({nombre: nombre, apellido: apellido, puntos: score}) 
+        })
         .then(() => {
             container.innerHTML = `
                 <h1 style="font-size: 3rem; color:var(--hacker-green)">🔒 SECURE_CONNECTION_CLOSED</h1>
@@ -276,10 +282,15 @@
                 <button class="btn" onclick="location.reload()">🔄 RE-INITIALIZE_SYSTEM</button>
             `;
             Swal.fire({ title: '✅ OPERATION_COMPLETE', text: 'Resultados encriptados y enviados al servidor central (Google Sheets).', icon: 'success', customClass: { popup: 'swal-hacker' } });
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            Swal.fire({ title: '❌ SYSTEM_FAULT', text: 'Error al enviar datos. Avisa al administrador.', icon: 'error', customClass: { popup: 'swal-hacker' } });
         });
     }
 </script>
 </body>
 </html>
+
 
 
