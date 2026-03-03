@@ -106,7 +106,7 @@
     <div id="login">
         <div class="emoji-box">🖥️</div>
         <h1 style="color: var(--hacker-green); margin: 0; text-shadow: 0 0 10px rgba(0,255,65,0.5);">SYSTEM_LOGIN</h1>
-        <p style="color: var(--hacker-green); opacity: 0.8; margin-bottom: 25px;">[ 🌐 Network Administration 1.0 ]</p>
+        <p style="color: var(--hacker-green); opacity: 0.8; margin-bottom: 25px;">[ 🌐 Instalación y Mantenimiento de Redes 2.0 ]</p>
         <input type="text" id="nombre" placeholder="🆔 USER_FIRST_NAME">
         <input type="text" id="apellido" placeholder="🆔 USER_LAST_NAME">
         <button class="btn" onclick="startQuiz()">▶️ INITIALIZE_PROTOCOL</button>
@@ -128,7 +128,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+    const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXCRAFTYZ0123456789MINE@#$%^&*()*&^%";
     const fontSize = 16;
     const columns = canvas.width / fontSize;
     const drops = [];
@@ -209,7 +209,7 @@
             clearInterval(timer);
             document.getElementById('level-indicator').innerText = "⚠️ ACCESS_LEVEL: CRÍTICO";
             document.getElementById('level-indicator').style.background = "var(--alert-red)";
-            await Swal.fire({ title: '⚠️ CRITICAL_PHASE', text: 'Entrando a nivel de administración de sistemas e infraestructura.', icon: 'warning', confirmButtonText: 'ACKNOWLEDGE', customClass: { popup: 'swal-hacker' } });
+            await Swal.fire({ title: '⚠️ FASE_CRÍTICA', text: 'Entrando a nivel de administración de sistemas e infraestructura.', icon: 'warning', confirmButtonText: 'ACKNOWLEDGE', customClass: { popup: 'swal-hacker' } });
         }
         
         document.getElementById('game-emoji').innerText = "📡";
@@ -249,7 +249,7 @@
         // Cartel explicativo obligatorio formal (45s)
         await Swal.fire({
             title: isCorrect ? '✅ DATA_VERIFIED' : '❌ SYSTEM_FAULT',
-            html: `<div class="swal-text-left"><b>ℹ️ TARGET_DATA:</b> ${questions[currentQ].a[questions[currentQ].c]}<br><br><b>📊 TECHNICAL_ANALYSIS:</b><br>${questions[currentQ].exp}</div>`,
+            html: `<div class="swal-text-left"><b>ℹ️ TARGET_DATA:</b> ${questions[currentQ].a[questions[currentQ].c]}<br><br><b>📊 ANÁLISIS_TÉCNICO:</b><br>${questions[currentQ].exp}</div>`,
             icon: isCorrect ? 'success' : 'error',
             confirmButtonText: 'CONTINUE_PROTOCOL',
             confirmButtonColor: '#00FF41',
@@ -294,6 +294,7 @@
 </script>
 </body>
 </html>
+
 
 
 
