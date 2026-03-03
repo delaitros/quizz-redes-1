@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redes Challenge Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <style>
+        :root { --púrpura: #6a1b9a; --verde: #4caf50; --rojo: #f44336; }
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        #game-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 100%; max-width: 600px; text-align: center; }
+        .hidden { display: none; }
+        input { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; width: 80%; }
+        .btn { background: var(--púrpura); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
+        #timer { font-size: 2rem; color: var(--rojo); margin: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="login">
+        <h1>🎮 Redes Challenge</h1>
+        <p>Ingresa tus datos para comenzar</p>
+        <input type="text" id="nombre" placeholder="Nombre">
+        <input type="text" id="apellido" placeholder="Apellido">
+        <button class="btn" onclick="startQuiz()">EMPEZAR EXAMEN</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+        <div id="score-display">Puntos: 0 | Pregunta: <span id="q-num">1</span>/30</div>
+        <div id="timer">15</div>
+        <h2 id="question-text"></h2>
+        <div id="options"></div>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbydxWKbTehUSDWoaLqgi0MuaMom7MrERLrwXLHqF3jSkMGUCQJClj5r0xJlAyMOv7DEoQ/exec'; // <--- PEGA AQUÍ TU URL
+    let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
+
+    const questions = [
+        { q: "¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Terminal Port", "User Type Protocol"], c: 0 },
+        { q: "¿Cuál es la capa 1 del modelo OSI?", a: ["Enlace", "Física", "Red"], c: 1 },
+        { q: "¿Qué herramienta se usa para poner el conector RJ45?", a: ["Pelacables", "Tester", "Crimpadora"], c: 2 },
+        // ... (Aquí agregaremos las 27 restantes)
+    ];
+
+    function startQuiz() {
+        nombre = document.getElementById('nombre').value;
+        apellido = document.getElementById('apellido').value;
+        if(!nombre || !apellido) return alert("Pon tu nombre y apellido");
+        document.getElementById('login').classList.add('hidden');
+        document.getElementById('quiz').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if(currentQ >= questions.length) return endRemote();
+        
+        timeLeft = 15;
+        document.getElementById('q-num').innerText = currentQ + 1;
+        document.getElementById('question-text').innerText = questions[currentQ].q;
+        const opts = document.getElementById('options');
+        opts.innerHTML = '';
+        
+        questions[currentQ].a.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'btn';
+            b.innerText = opt;
+            b.onclick = () => check(i);
+            opts.appendChild(b);
+        });
+
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            if(timeLeft <= 0) check(-1);
+        }, 1000);
+    }
+
+    function check(idx) {
+        clearInterval(timer);
+        const isCorrect = idx === questions[currentQ].c;
+        
+        if(isCorrect) {
+            score += (timeLeft * 10) + 100;
+            Swal.fire({ title: '¡Correcto!', icon: 'success', timer: 1000, showConfirmButton: false });
+        } else {
+            Swal.fire({ title: 'Incorrecto', text: 'La respuesta era: ' + questions[currentQ].a[questions[currentQ].c], icon: 'error', timer: 2000, showConfirmButton: false });
+        }
+
+        setTimeout(() => {
+            currentQ++;
+            showQuestion();
+        }, 1500);
+    }
+
+    function endRemote() {
+        document.getElementById('quiz').innerHTML = "<h2>Enviando puntaje...</h2>";
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify({nombre, apellido, puntos: score})
+        }).then(() => {
+            document.getElementById('quiz').innerHTML = `<h1>🏆 ¡Listo!</h1><p>${nombre}, tu puntaje final es: ${score}</p>`;
+        });
+    }
+</script>
+</body>
+</html>
