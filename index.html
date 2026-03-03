@@ -2,60 +2,97 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Redes Challenge Pro</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <style>
-        :root { --púrpura: #6a1b9a; --verde: #4caf50; --rojo: #f44336; }
-        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        #game-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 100%; max-width: 600px; text-align: center; }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes Challenge Pro: 30 Preguntas</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root { --púrpura: #6a1b9a; --verde: #4caf50; --rojo: #f44336; --fondo: #f3e5f5; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fondo); display: flex; justify-content: center; padding: 20px; min-height: 100vh; margin: 0; }
+        #game-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 600px; text-align: center; border: 4px solid var(--púrpura); }
         .hidden { display: none; }
-        input { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #ccc; width: 80%; }
-        .btn { background: var(--púrpura); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
-        #timer { font-size: 2rem; color: var(--rojo); margin: 10px; }
+        input { padding: 12px; margin: 10px 0; border-radius: 8px; border: 2px solid #ddd; width: 90%; font-size: 1rem; }
+        .btn { background: var(--púrpura); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; font-size: 1rem; transition: 0.3s; }
+        .btn:hover { background: #4a148c; transform: translateY(-2px); }
+        #timer { font-size: 2.5rem; font-weight: bold; color: var(--rojo); margin: 15px 0; }
+        #score-display { background: #eee; padding: 10px; border-radius: 10px; margin-bottom: 20px; font-weight: bold; }
+        .opt-btn { background: white; color: var(--púrpura); border: 2px solid var(--púrpura); }
+        .opt-btn:hover { background: var(--púrpura); color: white; }
     </style>
 </head>
 <body>
 
 <div id="game-container">
     <div id="login">
-        <h1>🎮 Redes Challenge</h1>
-        <p>Ingresa tus datos para comenzar</p>
+        <h1>🔌 Redes Challenge 1</h1>
+        <p>Instalación y Mantenimiento de Redes</p>
         <input type="text" id="nombre" placeholder="Nombre">
         <input type="text" id="apellido" placeholder="Apellido">
-        <button class="btn" onclick="startQuiz()">EMPEZAR EXAMEN</button>
+        <button class="btn" onclick="startQuiz()">INGRESAR AL EXAMEN</button>
     </div>
 
     <div id="quiz" class="hidden">
         <div id="score-display">Puntos: 0 | Pregunta: <span id="q-num">1</span>/30</div>
-        <div id="timer">15</div>
+        <div id="timer">180</div>
         <h2 id="question-text"></h2>
         <div id="options"></div>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbydxWKbTehUSDWoaLqgi0MuaMom7MrERLrwXLHqF3jSkMGUCQJClj5r0xJlAyMOv7DEoQ/exec'; // <--- PEGA AQUÍ TU URL
+    const scriptURL = 'TU_URL_DE_GOOGLE_SCRIPT'; 
     let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
 
     const questions = [
-        { q: "¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Terminal Port", "User Type Protocol"], c: 0 },
-        { q: "¿Cuál es la capa 1 del modelo OSI?", a: ["Enlace", "Física", "Red"], c: 1 },
-        { q: "¿Qué herramienta se usa para poner el conector RJ45?", a: ["Pelacables", "Tester", "Crimpadora"], c: 2 },
-        // ... (Aquí agregaremos las 27 restantes)
+        // NIVEL FÁCIL
+        { q: "¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Twisted Port", "Unitary Total Port"], c: 0 },
+        { q: "¿Cuál es el conector estándar para cables de red de cobre?", a: ["RJ-11", "RJ-45", "BNC"], c: 1 },
+        { q: "¿Qué herramienta se usa para fijar el conector al cable?", a: ["Soldador", "Crimpadora", "Pelacables"], c: 1 },
+        { q: "¿Cuál es la topología donde todos se conectan a un nodo central?", a: ["Bus", "Anillo", "Estrella"], c: 2 },
+        { q: "¿Qué cable es más inmune a interferencias electromagnéticas?", a: ["UTP", "Fibra Óptica", "Coaxial"], c: 1 },
+        { q: "¿Qué dispositivo central conecta equipos en una LAN?", a: ["Módem", "Switch", "Repetidor"], c: 1 },
+        { q: "¿Qué significan las siglas LAN?", a: ["Local Area Network", "Long Access Node", "Logical Area Net"], c: 0 },
+        { q: "¿Qué color de cable va primero en la norma T568B?", a: ["Verde-Blanco", "Naranja-Blanco", "Azul"], c: 1 },
+        { q: "¿Para qué sirve el comando 'ping'?", a: ["Ver velocidad", "Probar conectividad", "Cerrar sesión"], c: 1 },
+        { q: "¿Qué unidad mide la velocidad de transmisión?", a: ["Hertz", "Bps (bits por segundo)", "Watts"], c: 1 },
+        
+        // NIVEL MEDIO
+        { q: "¿En qué capa del modelo OSI trabaja el Switch?", a: ["Capa 1", "Capa 2", "Capa 3"], c: 1 },
+        { q: "¿Qué protocolo asigna direcciones IP automáticamente?", a: ["DNS", "DHCP", "FTP"], c: 1 },
+        { q: "¿Qué estándar define el WiFi?", a: ["IEEE 802.3", "IEEE 802.11", "IEEE 802.5"], c: 1 },
+        { q: "¿Cuál es la máscara por defecto de una clase C?", a: ["255.0.0.0", "255.255.0.0", "255.255.255.0"], c: 2 },
+        { q: "¿Qué cable usarías para conectar dos Switches entre sí (antiguamente)?", a: ["Cruzado", "Directo", "USB"], c: 0 },
+        { q: "¿Cuál es el puerto estándar del protocolo HTTP?", a: ["21", "80", "443"], c: 1 },
+        { q: "¿Qué hace la capa 3 (Red) del modelo OSI?", a: ["Direccionamiento físico", "Enrutamiento", "Cifrado"], c: 1 },
+        { q: "¿Cuál es el límite de distancia sugerido para un cable UTP?", a: ["50 metros", "100 metros", "500 metros"], c: 1 },
+        { q: "¿Qué es una dirección MAC?", a: ["Dirección lógica", "Dirección física única", "Un tipo de IP"], c: 1 },
+        { q: "¿Qué categoría de cable soporta hasta 10 Gbps a 55 metros?", a: ["Cat 5", "Cat 5e", "Cat 6"], c: 2 },
+
+        // NIVEL DIFÍCIL
+        { q: "¿Qué protocolo trabaja en la capa de Transporte?", a: ["IP", "TCP", "Ethernet"], c: 1 },
+        { q: "¿Para qué sirve el 'Traceroute'?", a: ["Ver la ruta de paquetes", "Borrar la caché", "Medir el voltaje"], c: 0 },
+        { q: "¿Qué par de cables transmite en una red 10/100 (T568B)?", a: ["Azul y Marrón", "Naranja y Verde", "Todos"], c: 1 },
+        { q: "¿Qué es el 'Crosstalk' o Diafonía?", a: ["Velocidad alta", "Interferencia entre pares", "Falla de energía"], c: 1 },
+        { q: "¿Cuántos bits tiene una dirección IPv4?", a: ["32", "64", "128"], c: 0 },
+        { q: "¿Cuál es la función del Router?", a: ["Conectar cables", "Interconectar redes distintas", "Amplificar señal"], c: 1 },
+        { q: "¿Qué protocolo resuelve nombres de dominio a IPs?", a: ["ARP", "DNS", "ICMP"], c: 1 },
+        { q: "¿Qué sucede si un cable tiene demasiada torsión?", a: ["Nada", "Mejora la señal", "Puede dañarse el cobre"], c: 2 },
+        { q: "¿Qué dispositivo opera en la Capa 1 del modelo OSI?", a: ["Hub", "Router", "Firewall"], c: 0 },
+        { q: "¿Qué significa Full-Duplex?", a: ["Solo envía", "Envía y recibe simultáneamente", "Turnos para hablar"], c: 1 }
     ];
 
     function startQuiz() {
         nombre = document.getElementById('nombre').value;
         apellido = document.getElementById('apellido').value;
-        if(!nombre || !apellido) return alert("Pon tu nombre y apellido");
+        if(!nombre || !apellido) return Swal.fire('Error', 'Ingresa tu nombre y apellido', 'warning');
         document.getElementById('login').classList.add('hidden');
         document.getElementById('quiz').classList.remove('hidden');
         showQuestion();
     }
 
     function showQuestion() {
-        if(currentQ >= questions.length) return endRemote();
+        if(currentQ >= questions.length) return endQuiz();
         
-        timeLeft = 15;
+        timeLeft = 180; // 3 MINUTOS
         document.getElementById('q-num').innerText = currentQ + 1;
         document.getElementById('question-text').innerText = questions[currentQ].q;
         const opts = document.getElementById('options');
@@ -63,7 +100,7 @@
         
         questions[currentQ].a.forEach((opt, i) => {
             const b = document.createElement('button');
-            b.className = 'btn';
+            b.className = 'btn opt-btn';
             b.innerText = opt;
             b.onclick = () => check(i);
             opts.appendChild(b);
@@ -81,25 +118,28 @@
         const isCorrect = idx === questions[currentQ].c;
         
         if(isCorrect) {
-            score += (timeLeft * 10) + 100;
-            Swal.fire({ title: '¡Correcto!', icon: 'success', timer: 1000, showConfirmButton: false });
+            score += (timeLeft * 2) + 100; // Puntos por tiempo + base
+            Swal.fire({ title: '¡Bien!', icon: 'success', timer: 800, showConfirmButton: false });
         } else {
-            Swal.fire({ title: 'Incorrecto', text: 'La respuesta era: ' + questions[currentQ].a[questions[currentQ].c], icon: 'error', timer: 2000, showConfirmButton: false });
+            Swal.fire({ title: 'Mal...', text: 'Era: ' + questions[currentQ].a[questions[currentQ].c], icon: 'error', timer: 1500, showConfirmButton: false });
         }
 
         setTimeout(() => {
             currentQ++;
             showQuestion();
-        }, 1500);
+        }, 1600);
     }
 
-    function endRemote() {
-        document.getElementById('quiz').innerHTML = "<h2>Enviando puntaje...</h2>";
+    function endQuiz() {
+        document.getElementById('quiz').innerHTML = "<h2>🚀 Enviando puntaje... No cierres la ventana</h2>";
         fetch(scriptURL, {
             method: 'POST',
+            mode: 'no-cors',
             body: JSON.stringify({nombre, apellido, puntos: score})
         }).then(() => {
-            document.getElementById('quiz').innerHTML = `<h1>🏆 ¡Listo!</h1><p>${nombre}, tu puntaje final es: ${score}</p>`;
+            document.getElementById('quiz').innerHTML = `<h1>🏆 ¡Gran Trabajo!</h1><p>${nombre} ${apellido}, lograste <strong>${score} puntos</strong>.</p><p>Tus resultados han sido guardados.</p>`;
+        }).catch(err => {
+            document.getElementById('quiz').innerHTML = `<h2>Error al guardar</h2><p>Puntos: ${score}. Avisa al profe.</p>`;
         });
     }
 </script>
