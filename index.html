@@ -3,69 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redes Challenge Pro</title>
+    <title>Redes Master Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --ios-blue: #007AFF;
-            --ios-bg: #F2F2F7;
-            --ios-card: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.7);
             --púrpura: #5856D6;
             --verde: #34C759;
             --rojo: #FF3B30;
         }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--ios-bg);
-            background-image: radial-gradient(circle at top right, #E5E5EA, #F2F2F7);
-            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            /* Fondo con patrón de WiFi en diagonal */
+            background-color: #001f3f;
+            background-image: 
+                linear-gradient(135deg, rgba(0, 122, 255, 0.2) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(0, 122, 255, 0.2) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(0, 122, 255, 0.2) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(0, 122, 255, 0.2) 25%, #001f3f 25%);
+            background-position: 40px 0, 40px 0, 0 0, 0 0;
+            background-size: 80px 80px;
+            background-repeat: repeat;
         }
+
+        /* Capa de difuminado sobre el fondo para que no distraiga */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, transparent 20%, #001f3f 90%);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
         #game-container {
-            background: var(--ios-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            width: 100%; max-width: 500px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            padding: 40px;
+            border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.4);
         }
+
         .hidden { display: none; }
-        h1 { font-weight: 700; letter-spacing: -1px; color: #1C1C1E; margin-bottom: 10px; }
+
+        h1 { color: #1C1C1E; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 5px; }
+
         input {
-            padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #C7C7CC;
-            width: 90%; font-size: 1rem; background: rgba(255,255,255,0.5);
+            padding: 16px; margin: 12px 0; border-radius: 15px; border: 1px solid rgba(0,0,0,0.1);
+            width: 90%; font-size: 1rem; background: rgba(255,255,255,0.8);
         }
+
         .btn {
-            background: var(--ios-blue); color: white; border: none; padding: 16px;
-            border-radius: 14px; cursor: pointer; width: 100%; margin-top: 15px;
-            font-weight: 600; font-size: 1.1rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--ios-blue); color: white; border: none; padding: 18px;
+            border-radius: 16px; cursor: pointer; width: 100%; margin-top: 15px;
+            font-weight: 600; font-size: 1.1rem; transition: all 0.3s;
         }
-        .btn:active { transform: scale(0.97); opacity: 0.8; }
-        #timer { font-size: 3rem; font-weight: 700; color: var(--rojo); margin: 10px 0; font-variant-numeric: tabular-nums; }
+
+        .btn:active { transform: scale(0.96); }
+
+        #timer { font-size: 3.5rem; font-weight: 700; color: var(--rojo); margin: 15px 0; font-variant-numeric: tabular-nums; }
+
         .level-badge {
-            display: inline-block; padding: 6px 15px; border-radius: 20px;
-            background: var(--púrpura); color: white; font-size: 0.8rem; font-weight: bold; margin-bottom: 15px;
+            display: inline-block; padding: 8px 20px; border-radius: 30px;
+            background: var(--púrpura); color: white; font-size: 0.9rem; font-weight: 800; margin-bottom: 20px;
         }
-        .opt-btn { background: white; color: #1C1C1E; border: 1px solid #C7C7CC; margin-bottom: 10px; }
-        .opt-btn:hover { background: #E5E5EA; }
+
+        .opt-btn { 
+            background: rgba(255,255,255,0.5); 
+            color: #1C1C1E; 
+            border: 1px solid rgba(0,0,0,0.1); 
+            margin-bottom: 12px; 
+            text-align: left;
+            padding-left: 25px;
+        }
+        
+        .opt-btn:hover { background: white; }
+
+        #score-val { color: var(--ios-blue); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="game-container">
     <div id="login">
-        <h1>🔌 Redes Master</h1>
-        <p style="color: #8E8E93;">Instalación y Mantenimiento 1</p>
-        <input type="text" id="nombre" placeholder="Nombre">
-        <input type="text" id="apellido" placeholder="Apellido">
-        <button class="btn" onclick="startQuiz()">Comenzar Reto</button>
+        <div style="font-size: 3rem; margin-bottom: 10px;">📶</div>
+        <h1>Redes Master</h1>
+        <p style="color: #3A3A3C; margin-bottom: 20px;">Examen de Instalación y Mantenimiento</p>
+        <input type="text" id="nombre" placeholder="Tu Nombre">
+        <input type="text" id="apellido" placeholder="Tu Apellido">
+        <button class="btn" onclick="startQuiz()">Entrar al Reto</button>
     </div>
 
     <div id="quiz" class="hidden">
         <div id="level-indicator" class="level-badge">NIVEL: FÁCIL</div>
-        <div style="font-weight: 600; color: #8E8E93; margin-bottom: 5px;">Puntos: <span id="score-val">0</span></div>
+        <div style="font-weight: 500; color: #3A3A3C;">Puntos: <span id="score-val">0</span></div>
         <div id="timer">180</div>
-        <h2 id="question-text" style="font-size: 1.4rem; margin-bottom: 25px;"></h2>
+        <h2 id="question-text" style="font-size: 1.5rem; color: #1C1C1E; margin-bottom: 30px;"></h2>
         <div id="options"></div>
     </div>
 </div>
@@ -75,7 +122,7 @@
     let nombre, apellido, score = 0, currentQ = 0, timer, timeLeft;
 
     const questions = [
-        // FÁCIL (0-9)
+        // (Las 30 preguntas se mantienen igual que la versión anterior...)
         { q: "¿Qué significa UTP?", a: ["Unshielded Twisted Pair", "Universal Twisted Port", "Unitary Total Port"], c: 0 },
         { q: "¿Cuál es el conector estándar para cables de cobre?", a: ["RJ-11", "RJ-45", "BNC"], c: 1 },
         { q: "¿Qué herramienta se usa para fijar el conector?", a: ["Soldador", "Crimpadora", "Pinza universal"], c: 1 },
@@ -86,7 +133,6 @@
         { q: "¿Color inicial en la norma T568B?", a: ["Verde-Blanco", "Naranja-Blanco", "Azul"], c: 1 },
         { q: "¿Para qué sirve el comando 'ping'?", a: ["Velocidad", "Conectividad", "Cerrar sesión"], c: 1 },
         { q: "¿Qué unidad mide la velocidad de transmisión?", a: ["Hertz", "Bps (bits/seg)", "Watts"], c: 1 },
-        // MEDIO (10-19)
         { q: "¿En qué capa OSI trabaja el Switch?", a: ["Capa 1", "Capa 2", "Capa 3"], c: 1 },
         { q: "¿Protocolo que asigna IPs automáticamente?", a: ["DNS", "DHCP", "FTP"], c: 1 },
         { q: "¿Qué estándar define el WiFi?", a: ["802.3", "802.11", "802.5"], c: 1 },
@@ -97,7 +143,6 @@
         { q: "¿Límite de distancia cable UTP?", a: ["50m", "100m", "500m"], c: 1 },
         { q: "¿Qué es una dirección MAC?", a: ["Lógica", "Física única", "Tipo de IP"], c: 1 },
         { q: "¿Categoría para 10 Gbps (55m)?", a: ["Cat 5", "Cat 5e", "Cat 6"], c: 2 },
-        // DIFÍCIL (20-29)
         { q: "¿Protocolo de capa de Transporte?", a: ["IP", "TCP", "Ethernet"], c: 1 },
         { q: "¿Función de 'Traceroute'?", a: ["Ruta de paquetes", "Caché", "Voltaje"], c: 0 },
         { q: "¿Pares que transmiten en 10/100?", a: ["Azul/Marrón", "Naranja/Verde", "Todos"], c: 1 },
@@ -113,28 +158,43 @@
     function startQuiz() {
         nombre = document.getElementById('nombre').value.trim();
         apellido = document.getElementById('apellido').value.trim();
-        if(!nombre || !apellido) return Swal.fire({title: 'Oops!', text: 'Necesitamos tu nombre', icon: 'info', confirmButtonColor: '#007AFF'});
+        if(!nombre || !apellido) return Swal.fire({title: 'Faltan datos', text: 'Por favor ingresa tu nombre y apellido', icon: 'info', confirmButtonColor: '#007AFF'});
         document.getElementById('login').classList.add('hidden');
         document.getElementById('quiz').classList.remove('hidden');
         showQuestion();
     }
 
-    function updateLevel() {
+    async function checkLevelChange() {
         const badge = document.getElementById('level-indicator');
         if (currentQ === 10) {
             badge.innerText = "NIVEL: MEDIO";
             badge.style.background = "#FF9500";
-            Swal.fire({title: '¡Nivel Medio!', text: 'Subiendo la dificultad...', icon: 'success', timer: 1500, showConfirmButton: false});
+            await Swal.fire({
+                title: '📶 ¡Nivel Medio!',
+                text: 'Has superado lo básico. ¿Listo para subir la dificultad?',
+                icon: 'success',
+                confirmButtonText: '¡Vamos!',
+                confirmButtonColor: '#FF9500'
+            });
         } else if (currentQ === 20) {
             badge.innerText = "NIVEL: DIFÍCIL";
             badge.style.background = "#FF3B30";
-            Swal.fire({title: '¡Nivel Experto!', text: '¡Demuestra lo que sabes!', icon: 'warning', timer: 1500, showConfirmButton: false});
+            await Swal.fire({
+                title: '⚡ ¡Nivel Experto!',
+                text: 'Solo para los mejores. ¡No te rindas ahora!',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar Reto',
+                confirmButtonColor: '#FF3B30'
+            });
         }
     }
 
-    function showQuestion() {
+    async function showQuestion() {
         if(currentQ >= questions.length) return endQuiz();
-        updateLevel();
+        
+        if (currentQ === 10 || currentQ === 20) {
+            await checkLevelChange();
+        }
         
         timeLeft = 180;
         document.getElementById('timer').innerText = timeLeft;
@@ -166,21 +226,21 @@
             document.getElementById('score-val').innerText = score;
             Swal.fire({ title: '¡Correcto!', icon: 'success', timer: 800, showConfirmButton: false });
         } else {
-            Swal.fire({ title: 'Incorrecto', text: 'La respuesta era: ' + questions[currentQ].a[questions[currentQ].c], icon: 'error', timer: 1500, showConfirmButton: false });
+            Swal.fire({ title: 'Incorrecto', text: 'La respuesta correcta era: ' + questions[currentQ].a[questions[currentQ].c], icon: 'error', timer: 2000, showConfirmButton: false });
         }
 
         setTimeout(() => {
             currentQ++;
             showQuestion();
-        }, 1600);
+        }, 1800);
     }
 
     function endQuiz() {
         const container = document.getElementById('quiz');
-        container.innerHTML = "<h2>Enviando resultados...</h2>";
+        container.innerHTML = "<h2>Guardando en la base de datos...</h2>";
         
-        let feedback = score > 4000 ? "¡Increíble! Eres un experto en redes. 🚀" : "Buen intento, pero presta más atención en clase. 📚";
-        let icon = score > 4000 ? "success" : "info";
+        let feedback = score > 4500 ? "¡Increíble! Eres un experto en redes. 🚀" : "Buen intento, pero te recomiendo prestar más atención en las próximas clases. 📚";
+        let icon = score > 4500 ? "success" : "info";
 
         fetch(scriptURL, {
             method: 'POST',
@@ -188,13 +248,13 @@
             body: JSON.stringify({nombre, apellido, puntos: score})
         }).then(() => {
             container.innerHTML = `
-                <h1 style="font-size: 3rem;">🏆</h1>
-                <h2>${nombre}, finalizaste el reto</h2>
-                <p style="font-size: 1.2rem; font-weight: bold;">Puntaje: ${score}</p>
-                <p>${feedback}</p>
-                <button class="btn" onclick="location.reload()">Volver a intentar</button>
+                <h1 style="font-size: 4rem;">🏆</h1>
+                <h2>${nombre}, reto finalizado</h2>
+                <p style="font-size: 1.4rem; font-weight: bold; color: var(--ios-blue);">Puntaje: ${score}</p>
+                <p style="padding: 0 20px;">${feedback}</p>
+                <button class="btn" onclick="location.reload()">Reiniciar</button>
             `;
-            Swal.fire({ title: '¡Terminaste!', text: feedback, icon: icon });
+            Swal.fire({ title: '¡Examen Terminado!', text: feedback, icon: icon, confirmButtonColor: '#007AFF' });
         });
     }
 </script>
